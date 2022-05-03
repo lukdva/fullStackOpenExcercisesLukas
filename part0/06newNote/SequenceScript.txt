@@ -1,0 +1,13 @@
+note over browser:
+Submitted note is pushed to notes list of client side
+An updated list of notes is rendered
+end note
+
+browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+
+note over  server:
+Note is formated (Max 200 symbols allowed) and date is added
+Note is added to notes list of server side
+end note
+
+server-->browser: {"message":"note created"}
