@@ -1,43 +1,45 @@
 const App = () => {
   const course = 'Half Stack application development'
-  const part1 = {
-    name: 'Fundamentals of React',
-    exercises: 10
-  }
-  const part2 = {
-    name: 'Using props to pass data',
-    exercises: 7
-  }
-  const part3 = {
-    name: 'State of a component',
-    exercises: 14
-  }
+  const parts = [
+    {
+      name: 'Fundamentals of React',
+      exercises: 10
+    },
+    {
+      name: 'Using props to pass data',
+      exercises: 7
+    },
+    {
+      name: 'State of a component',
+      exercises: 14
+    }
+  ]
 
   return (
     <div>
       <Header course={course} />
-      <Content part1={part1} part2={part2} part3={part3}/>
-      <Total exercisesArray={[part1.exercises, part2.exercises, part3.exercises]} />
+      <Content parts={parts}/>
+      <Total parts={parts} />
     </div>
   )
 }
 
 const Header = (props) => <h1>{props.course}</h1>
-const Total = (props) => <p>Number of exercises {arraySum(props.exercisesArray) }</p>
+const Total = (props) => <p>Number of exercises {arraySum(props.parts) }</p>
 const Content = (props) => {
 return (
   <>
-    <Part name={props.part1.name} exercises={props.part1.exercises}/>
-    <Part name={props.part2.name} exercises={props.part2.exercises}/>
-    <Part name={props.part3.name} exercises={props.part3.exercises}/>
+    <Part part={props.parts[0]}/>
+    <Part part={props.parts[1]}/>
+    <Part part={props.parts[2]}/>
   </>
 )}
-const Part = (props) => <p> {props.name} {props.exercises} </p>
+const Part = (props) => <p> {props.part.name} {props.part.exercises} </p>
 
 
-const arraySum = (array) => {
+const arraySum = (parts) => {
   let sum = 0;
-  array.forEach(number => sum += number);
+  parts.forEach(part => sum += part.exercises);
   return sum;
 }
 export default App
