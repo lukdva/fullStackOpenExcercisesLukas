@@ -15,10 +15,10 @@ const Button = ({name, onClick}) => {
   )
 }
 
-const Statistic = ({name, count}) => {
+const Statistic = ({name, value}) => {
   return (
     <p>
-      {name} {count}
+      {name} {value}
     </p>
   )
 }
@@ -27,6 +27,16 @@ const App = () => {
   const [good, setGood] = useState(0)
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
+
+  const feedbackCount = () => {
+    return good + neutral + bad;
+  }
+  const feedbackAverage = () => {
+    return (good - bad)/feedbackCount();
+  }
+  const positivePercentage = () => {
+    return good*100/feedbackCount();
+  }
 
   return (
     <>
@@ -38,9 +48,12 @@ const App = () => {
       </div>
       <div>
         <Header name='Statistics'/>
-        <Statistic name='good' count={good}/>
-        <Statistic name='neutral' count={neutral}/>
-        <Statistic name='bad' count={bad}/>
+        <Statistic name='good' value={good}/>
+        <Statistic name='neutral' value={neutral}/>
+        <Statistic name='bad' value={bad}/>
+        <Statistic name='all' value={feedbackCount()}/>
+        <Statistic name='average' value={feedbackAverage()}/>
+        <Statistic name='positive' value={positivePercentage()+' %'}/>
       </div>
     </>
   )
