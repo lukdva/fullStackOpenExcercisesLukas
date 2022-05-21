@@ -24,6 +24,8 @@ const Statistic = ({name, value}) => {
 }
 
 const Statistics = ({good, neutral, bad, feedbackCount, feedbackAverage, positivePercentage}) => {
+  console.log(feedbackCount);
+  if (feedbackCount() > 0)
   return (
     <div>
         <Header name='Statistics'/>
@@ -34,6 +36,13 @@ const Statistics = ({good, neutral, bad, feedbackCount, feedbackAverage, positiv
         <Statistic name='average' value={feedbackAverage()}/>
         <Statistic name='positive' value={positivePercentage()+' %'}/>
       </div>
+  )
+  else
+  return (
+    <div>
+      <Header name='Statistics'/>
+      <p> No feedback given </p>
+    </div>
   )
 }
 const App = () => {
