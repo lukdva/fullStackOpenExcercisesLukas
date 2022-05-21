@@ -15,26 +15,35 @@ const Button = ({name, onClick}) => {
   )
 }
 
-const Statistic = ({name, value}) => {
+const StatisticLine = ({text, value}) => {
   return (
     <p>
-      {name} {value}
+      {text} {value}
     </p>
   )
 }
 
-const Statistics = ({good, neutral, bad, feedbackCount, feedbackAverage, positivePercentage}) => {
-  console.log(feedbackCount);
+const Statistics = ({good, neutral, bad}) => {
+  const feedbackCount = () => {
+    return good + neutral + bad;
+  }
+  const feedbackAverage = () => {
+    return (good - bad)/feedbackCount();
+  }
+  const positivePercentage = () => {
+    return good*100/feedbackCount();
+  }
+
   if (feedbackCount() > 0)
   return (
     <div>
         <Header name='Statistics'/>
-        <Statistic name='good' value={good}/>
-        <Statistic name='neutral' value={neutral}/>
-        <Statistic name='bad' value={bad}/>
-        <Statistic name='all' value={feedbackCount()}/>
-        <Statistic name='average' value={feedbackAverage()}/>
-        <Statistic name='positive' value={positivePercentage()+' %'}/>
+        <StatisticLine text='good' value={good}/>
+        <StatisticLine text='neutral' value={neutral}/>
+        <StatisticLine text='bad' value={bad}/>
+        <StatisticLine text='all' value={feedbackCount()}/>
+        <StatisticLine text='average' value={feedbackAverage()}/>
+        <StatisticLine text='positive' value={positivePercentage()+' %'}/>
       </div>
   )
   else
@@ -51,24 +60,24 @@ const App = () => {
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
 
-  const feedbackCount = () => {
-    return good + neutral + bad;
+  const handleGoodClick = () => {
+    setGood(good + 1)
   }
-  const feedbackAverage = () => {
-    return (good - bad)/feedbackCount();
+  const handleNeutralClick= () => {
+    setNeutral(neutral + 1)
   }
-  const positivePercentage = () => {
-    return good*100/feedbackCount();
+  const handleBadClick= () => {
+    setBad(bad + 1)
   }
   return (
     <>
       <div>
         <Header name='Give feedback'/>
-        <Button name='good' onClick={() => setGood(good + 1)}/>
-        <Button name='neutral' onClick={() => setNeutral(neutral + 1)}/>
-        <Button name='bad'onClick={() => setBad(bad + 1)}/>
+        <Button name='good' onClick={handleGoodClick}/>
+        <Button name='neutral' onClick={handleNeutralClick}/>
+        <Button name='bad'onClick={handleBadClick}/>
       </div>
-      <Statistics good={good} neutral={neutral} bad={bad} feedbackCount={feedbackCount} feedbackAverage={feedbackAverage} positivePercentage={positivePercentage}/>
+      <Statistics good={good} neutral={neutral} bad={bad}/>
     </>
   )
 }
