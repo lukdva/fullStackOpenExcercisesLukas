@@ -17,9 +17,11 @@ const Button = ({name, onClick}) => {
 
 const StatisticLine = ({text, value}) => {
   return (
-    <p>
-      {text} {value}
-    </p>
+    <tr>
+      <td>{text}</td>
+      <td>{value}</td>
+       
+    </tr>
   )
 }
 
@@ -38,12 +40,16 @@ const Statistics = ({good, neutral, bad}) => {
   return (
     <div>
         <Header name='Statistics'/>
-        <StatisticLine text='good' value={good}/>
-        <StatisticLine text='neutral' value={neutral}/>
-        <StatisticLine text='bad' value={bad}/>
-        <StatisticLine text='all' value={feedbackCount()}/>
-        <StatisticLine text='average' value={feedbackAverage()}/>
-        <StatisticLine text='positive' value={positivePercentage()+' %'}/>
+        <table>
+          <tbody>
+          <StatisticLine text='good' value={good}/>
+          <StatisticLine text='neutral' value={neutral}/>
+          <StatisticLine text='bad' value={bad}/>
+          <StatisticLine text='all' value={feedbackCount()}/>
+          <StatisticLine text='average' value={feedbackAverage()}/>
+          <StatisticLine text='positive' value={positivePercentage()+' %'}/>
+          </tbody>
+        </table>
       </div>
   )
   else
@@ -54,6 +60,7 @@ const Statistics = ({good, neutral, bad}) => {
     </div>
   )
 }
+
 const App = () => {
   // save clicks of each button to its own state
   const [good, setGood] = useState(0)
