@@ -1,4 +1,21 @@
 import { useState } from 'react'
+const Anecdote = ({title, anecdote, voteCount}) => {
+  return (
+    <>
+      <h1>{title}</h1>
+      <div>{anecdote}</div>
+      <div>
+      {'has ' + voteCount + ' votes'}
+    </div>
+    </>
+  )
+}
+
+const Button = ({text, action}) => {
+  return (
+    <button onClick={action}>{text}</button>
+  )
+}
 
 const App = () => {
   const anecdotes = [
@@ -24,18 +41,26 @@ const App = () => {
     votesCopy[selected]++;
     setVotes(votesCopy);
   }
+  const largestIndex = ((array) => {
+    let largest = array[0];
+    let largestIndex = 0;
+    for(let i = 1; i< array.length; i++) {
+      if(array[i] > largest) {
+        largest = array[i];
+        largestIndex = i;
+      }
+    }
+    return largestIndex;
+  })(votes);
+
   return (
     <>
+    <Anecdote title='Anecdote of the Day' anecdote={anecdotes[selected]} voteCount={votes[selected]}/>
     <div>
-      {anecdotes[selected]}
+      <Button text='vote' action={handleVoteButtonClick}/>
+      <Button text='next anecdote' action={handleNextButtonClick}/>
     </div>
-    <div>
-      {'has ' + votes[selected] + ' votes'}
-    </div>
-    <div>
-      <button onClick={handleVoteButtonClick}>{'vote'}</button>
-      <button onClick={handleNextButtonClick}>{'next anecdote'}</button>
-    </div>
+    <Anecdote title='Anecdote with most votes' anecdote={anecdotes[largestIndex]} voteCount={votes[largestIndex]}/>
     </>
   )
 }
