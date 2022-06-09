@@ -5,7 +5,7 @@ const Persons = ({persons, filter}) => {
   return (
     persons
     .filter(person => person.name.toLowerCase().includes(filter.toLowerCase()))
-    .map(person => <p key={person.name}>{person.name} {person.phone}</p> )
+    .map(person => <p key={person.name}>{person.name} {person.number}</p> )
   )
 }
 const Filter = ({handleFilterChange}) => {
@@ -43,7 +43,13 @@ const App = () => {
       alert(`${newName} is already added to phonebook`)
     }
     else {
-      setPersons(persons.concat({name: newName, phone:newPhone}));
+      const personObject = {name: newName, number:newPhone}
+      axios
+      .post('http://localhost:3001/persons', personObject)
+      .then( response => {
+        setPersons(persons.concat(response.data));
+      });
+      
     }
   }
 
@@ -61,6 +67,7 @@ const App = () => {
     axios
     .get('http://localhost:3001/persons')
     .then(result => {
+      console.log(result.data)
       setPersons(result.data);
     })
   },[]);
