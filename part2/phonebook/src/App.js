@@ -2,6 +2,16 @@ import axios from 'axios'
 import { useState, useEffect } from 'react'
 import personService from './services/persons'
 
+const Message = ({msg}) => {
+  if (msg == null) {
+    return null
+  }
+  return (
+    <div className='notification'>
+      {msg}
+    </div>
+  )
+}
 const Persons = ({persons, filter, handleDeleteClick}) => {
   return (
     persons
@@ -37,6 +47,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newPhone, setNewPhone] = useState('')
   const [newFilter, setNewFilter] = useState('')
+  const [message, setNewMessage] = useState('Test');
 
   const submitPhone = (event) => {
     event.preventDefault();
@@ -48,6 +59,8 @@ const App = () => {
         .update(samePerson.id, updatedPerson)
         .then(responsePerson =>{
           setPersons(persons.map(person => (person.id !== samePerson.id)? person:responsePerson))
+          setNewMessage(`${responsePerson.name} phone number has been updated`)
+          setTimeout(() => {setNewMessage(null)}, 5000);
         }
         );
       }
@@ -58,6 +71,8 @@ const App = () => {
       .create(personObject)
       .then(createdPerson => {
         setPersons(persons.concat(createdPerson))
+        setNewMessage(`${createdPerson.name} was added`)
+          setTimeout(() => {setNewMessage(null)}, 5000);
       })
     }
   }
@@ -90,6 +105,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Message msg={message}/>
       <Filter handleFilterChange={handleFilterChange}/>
       <h2>Add a new</h2>
       <PersonForm submitPhone={submitPhone} handleNameChange={handleNameChange} handlePhoneChange={handlePhoneChange}/>
