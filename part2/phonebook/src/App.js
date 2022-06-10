@@ -2,12 +2,20 @@ import axios from 'axios'
 import { useState, useEffect } from 'react'
 import personService from './services/persons'
 
-const Message = ({msg}) => {
+const Message = ({msg, error}) => {
   if (msg == null) {
     return null
   }
+  if (error)
+  {
+    return (
+      <div className='error notification'>
+        {msg}
+      </div>
+    )
+  }
   return (
-    <div className='notification'>
+    <div className='success notification'>
       {msg}
     </div>
   )
@@ -47,7 +55,8 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newPhone, setNewPhone] = useState('')
   const [newFilter, setNewFilter] = useState('')
-  const [message, setNewMessage] = useState('Test');
+  const [message, setNewMessage] = useState(null);
+  const [isError, setIsError] = useState(false);
 
   const submitPhone = (event) => {
     event.preventDefault();
@@ -62,7 +71,15 @@ const App = () => {
           setNewMessage(`${responsePerson.name} phone number has been updated`)
           setTimeout(() => {setNewMessage(null)}, 5000);
         }
-        );
+        ).catch(() => {
+          setIsError(true);
+          setNewMessage(`${samePerson.name} was already removed from the server`)
+          setPersons(persons.filter(person => person.id !==samePerson.id));
+          setTimeout(() => {
+            setNewMessage(null);
+            setIsError(false);
+          }, 5000);
+        });
       }
     }
     else {
@@ -97,7 +114,6 @@ const App = () => {
     personService
     .getAll()
     .then(retrievedPersons => {
-      console.log(retrievedPersons)
       setPersons(retrievedPersons);
     });
   },[]);
@@ -105,7 +121,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Message msg={message}/>
+      <Message msg={message} error={isError}/>
       <Filter handleFilterChange={handleFilterChange}/>
       <h2>Add a new</h2>
       <PersonForm submitPhone={submitPhone} handleNameChange={handleNameChange} handlePhoneChange={handlePhoneChange}/>
